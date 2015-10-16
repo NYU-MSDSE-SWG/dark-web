@@ -17,9 +17,12 @@ def read_forum_json(fpath):
     return df
 
 
-def generate_corpus(df):
+def generate_corpus(df, tokenizer=None):
+    if not tokenizer:
+        tokenizer = utils.simple_preprocess
+
     documents = df.content.values
-    texts = [utils.simple_preprocess(doc) for doc in documents]
+    texts = [tokenizer(doc) for doc in documents]
     texts = [[w for w in doc if w not in STOPWORDS] for doc in texts]
     dictionary = corpora.Dictionary(texts)
     corpus = [dictionary.doc2bow(text) for text in texts]
