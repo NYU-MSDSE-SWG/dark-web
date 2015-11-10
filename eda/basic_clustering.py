@@ -6,6 +6,7 @@ from utils import read_forum_json
 
 
 def to_daily_active_counts(df):
+    df = df.copy()
     df['time'] = pd.to_datetime(df.created_at, unit='ms')
     df['date'] = df.time.apply(lambda x: x.date())
 

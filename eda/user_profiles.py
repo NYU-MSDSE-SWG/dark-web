@@ -17,6 +17,7 @@ def to_daily_active_counts(df):
             column represents a date, values are counts of posts from that user
             on that date
     """
+    df = df.copy()
     df['time'] = pd.to_datetime(df.created_at, unit='ms')
     df['date'] = df.time.apply(lambda x: x.date())
 
