@@ -1,8 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import gensim
 from gensim.models.ldamodel import LdaModel
 from gensim.parsing.preprocessing import STOPWORDS
-from gensim import corpora
 from utils import read_forum_json, ADDITIONAL_STOPWORDS
 
 
@@ -84,7 +84,7 @@ def plot_author(author_week_df, author_id):
 def generate_corpus_weekly(series, tokenizer=None):
     """Generate corpus and dictionary from a series of documents"""
     if not tokenizer:
-        tokenizer = utils.simple_preprocess
+        tokenizer = gensim.utils.simple_preprocess
 
     documents = series.values
     texts = [tokenizer(doc) for doc in documents]
@@ -92,7 +92,7 @@ def generate_corpus_weekly(series, tokenizer=None):
               if (w.lower() not in STOPWORDS and
                   w.lower() not in ADDITIONAL_STOPWORDS)]
              for doc in texts]
-    dictionary = corpora.Dictionary(texts)
+    dictionary = gensim.corpora.Dictionary(texts)
     corpus = [dictionary.doc2bow(text) for text in texts]
     return corpus, dictionary
 
