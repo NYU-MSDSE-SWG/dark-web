@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from gensim.models.ldamulticore import LdaMulticore
+from gensim.models.ldamodel import LdaModel
 from gensim.parsing.preprocessing import STOPWORDS
 from gensim import corpora, utils
 from utils import read_forum_json, ADDITIONAL_STOPWORDS
@@ -98,8 +98,7 @@ def generate_corpus_weekly(series, tokenizer=None):
 
 def lda_weekly(series, n_topics=5):
     corpus, dictionary = generate_corpus_weekly(series)
-    lda = LdaMulticore(corpus, num_topics=n_topics, id2word=dictionary,
-                       workers=2)
+    lda = LdaModel(corpus, num_topics=n_topics, id2word=dictionary)
     return lda, corpus, dictionary
 
 
