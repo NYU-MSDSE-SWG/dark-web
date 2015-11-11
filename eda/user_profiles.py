@@ -82,6 +82,7 @@ def plot_author(author_week_df, author_id):
 
 
 def generate_corpus_weekly(series, tokenizer=None):
+    """Generate corpus and dictionary from a series of documents"""
     if not tokenizer:
         tokenizer = utils.simple_preprocess
 
@@ -97,9 +98,33 @@ def generate_corpus_weekly(series, tokenizer=None):
 
 
 def lda_weekly(series, n_topics=5):
+    """Do LDA on a column"""
     corpus, dictionary = generate_corpus_weekly(series)
     lda = LdaModel(corpus, num_topics=n_topics, id2word=dictionary)
     return lda, corpus, dictionary
+
+
+def weekly_keywords(col):
+    """Extract keywords for each account in a column (week)"""
+    lda, corpus = lda_weekly(col)
+    str_to_corpus = {a: b for a, b in zip(col.values, corpus)}
+    new_col = {key: ('' if not value else get_keywords_from_lda(
+        lda, str_to_corpus[value]))
+               for key, value in col.to_dict().items()}
+    return pd.Series(new_col)
+
+
+def get_keywords_from_lda(lda, doc, n_keywords=10):
+    keywords = []
+    prob_step = 1.0 / n_keywords
+    topic_dist = lda[doc]
+    for topic, prob in topic_dist:
+        n_words = int(prob / prob_step)
+        if n_words > 0:
+            prob_word_pairs = lda.show_topic(topic)[:n_words]
+            words = [pair[1] for pair in prob_word_pairs]
+            keywords.extend(words)
+    return ' '.join(keywords)
 
 
 def main():
@@ -115,3 +140,6 @@ def main():
     lda, corpus, dictionary = lda_weekly(author_week_content.iloc[:, 50])
     # infer topic for the first document which corresponds to the first row
     print lda[corpus[0]]
+
+    # Get keywords for each author in each week by doing LDA
+    author_week_keywords = author_week_content.apply(weekly_keywords, axis=0)
