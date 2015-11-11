@@ -4,6 +4,10 @@ from gensim import corpora, utils
 from gensim.parsing.preprocessing import STOPWORDS
 
 
+ADDITIONAL_STOPWORDS = set(['photobucket', 'http', 'com', 'gif', 'jpg',
+                            'image', 'images', 'www', 'albums', 'smilies'])
+
+
 def read_forum_json(fpath):
     with open(fpath, 'rb') as f:
         data = [json.loads(line) for line in f.readlines()]
