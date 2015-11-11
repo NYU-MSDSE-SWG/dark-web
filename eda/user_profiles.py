@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from gensim.models.ldamodel import LdaModel
 from gensim.parsing.preprocessing import STOPWORDS
-from gensim import corpora, utils
+from gensim import corpora
 from utils import read_forum_json, ADDITIONAL_STOPWORDS
 
 
