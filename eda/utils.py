@@ -5,7 +5,8 @@ from gensim.parsing.preprocessing import STOPWORDS
 
 
 ADDITIONAL_STOPWORDS = set(['photobucket', 'http', 'com', 'gif', 'jpg',
-                            'image', 'images', 'www', 'albums', 'smilies'])
+                            'image', 'know', 'll', 'images', 'www', 'albums',
+                            'smilies', 've', 'wrote', 'like', 'good'])
 
 
 def read_forum_json(fpath):
